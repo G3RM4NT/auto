@@ -1,0 +1,203 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Customers API",
+    "description": "API para gestionar clientes",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/institutotecnicorica-287/auto/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/api/customers": {
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Crear un nuevo cliente",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              },
+              "example": {
+                "nombre": "Juan Pérez",
+                "correo": "juan.perez@example.com",
+                "contrasenia": "MiContraseniaSegura123",
+                "telefono": "1234-5678",
+                "direccion": "Colonia Centro, San Salvador",
+                "DUI": "01234567-8"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente creado correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en la solicitud"
+          }
+        }
+      }
+    },
+    "/api/customers/{customerId}": {
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Actualizar un cliente existente",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "ID del cliente a actualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              },
+              "example": {
+                "nombre": "Juan Pérez Actualizado",
+                "correo": "juan.perez.actualizado@example.com",
+                "contrasenia": "NuevaContrasenia123",
+                "telefono": "9876-5432",
+                "direccion": "Colonia Escalon, San Salvador",
+                "DUI": "87654321-0"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Cliente actualizado correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en la solicitud"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Eliminar un cliente por ID",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "ID del cliente a eliminar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cliente eliminado correctamente (sin contenido)"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "required": [
+          "DUI",
+          "contrasenia",
+          "correo",
+          "direccion",
+          "nombre",
+          "telefono"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "description": "Nombre completo del cliente"
+          },
+          "correo": {
+            "type": "string",
+            "description": "Correo electrónico del cliente",
+            "format": "email"
+          },
+          "contrasenia": {
+            "type": "string",
+            "description": "Contraseña del cliente (debe ser almacenada de forma segura)"
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de contacto"
+          },
+          "direccion": {
+            "type": "string",
+            "description": "Dirección física"
+          },
+          "DUI": {
+            "type": "string",
+            "description": "Documento Único de Identidad"
+          }
+        }
+      },
+      "CustomerResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Customer"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "ID generado por la base de datos"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
